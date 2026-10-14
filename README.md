@@ -20,7 +20,9 @@ npm test           # engine, phòng chơi và test end-to-end qua socket
 Chơi cùng bạn bè: mở trang, nhập tên, **Tạo phòng mới**, gửi liên kết mời. Mỗi người mở bằng trình duyệt riêng
 (cùng mạng LAN dùng địa chỉ IP máy chủ, hoặc đưa lên VPS/tunnel). Tải lại trang sẽ tự vào lại phòng.
 
-Biến môi trường: `PORT` (mặc định 3000).
+Biến môi trường: `PORT` (mặc định 3000), `LOG_DIR` (mặc định `logs/`).
+
+Server ghi log ra console và file `logs/server-YYYY-MM-DD.log` (mỗi dòng: thời gian, sự kiện, JSON chi tiết gồm socket, phòng, người chơi, action, lỗi). Khi gặp lỗi, gửi file này để dò: `grep '"ok":false' logs/*.log`.
 
 ## Cách chơi (bản demo)
 
