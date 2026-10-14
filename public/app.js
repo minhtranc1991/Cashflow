@@ -57,6 +57,14 @@ const act = (a) => call('game:action', a);
 function saveMe(r, name) {
   me = { code: r.code, playerId: r.playerId, token: r.token, name };
   localStorage.setItem(KEY, JSON.stringify(me));
+  render(); // 'state' có thể đến trước ack, lúc đó me chưa có nên phải vẽ lại ở đây
+}
+
+let busy = false; // chặn bấm đúp tạo/vào phòng hai lần
+async function once(fn) {
+  if (busy) return;
+  busy = true;
+  try { await fn(); } finally { busy = false; }
 }
 
 async function createRoom() {
@@ -273,8 +281,8 @@ $app.addEventListener('click', async (e) => {
   const el = e.target.closest('[data-act]');
   if (!el) return;
   switch (el.dataset.act) {
-    case 'create': return createRoom();
-    case 'join': return joinRoom();
+    case 'create': return once(createRoom);
+    case 'join': return once(joinRoom);
     case 'start': return call('game:start', {});
     case 'game': return act(JSON.parse(el.dataset.a));
     case 'view': viewId = el.dataset.id; return render();

@@ -31,3 +31,19 @@ test('2 người chơi qua socket: tạo phòng, vào, bắt đầu, tung xúc x
   assert.ok(st.game.dice.length >= 1);
   assert.equal(st.players.length, 2);
 });
+
+test('bấm vào phòng 2 lần trên cùng một socket không tạo thêm người chơi', async (t) => {
+  await new Promise((r) => server.listen(0, r));
+  const url = `http://localhost:${server.address().port}`;
+  const a = connect(url);
+  const b = connect(url);
+  t.after(() => { a.close(); b.close(); server.close(); });
+
+  const created = await call(a, 'room:create', { name: 'An' });
+  const j1 = await call(b, 'room:join', { code: created.code, name: 'Bình' });
+  const j2 = await call(b, 'room:join', { code: created.code, name: 'Bình' });
+  const again = await call(a, 'room:create', { name: 'An' });
+  assert.equal(j2.playerId, j1.playerId);
+  assert.equal(again.code, created.code); // không sinh phòng thứ hai
+  assert.equal(require('../src/server/rooms').rooms.get(created.code).players.length, 2);
+});
