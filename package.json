@@ -1,0 +1,16 @@
+{
+  "name": "dong-tien",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dòng Tiền - board game đầu tư tài chính chơi online nhiều người (bản Việt hóa, lấy cảm hứng từ CashFlow 101).",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node src/server/index.js",
+    "test": "node --test tests/"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}
